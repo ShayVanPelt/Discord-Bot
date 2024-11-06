@@ -1,5 +1,11 @@
 import discord
 import random
+import aiosqlite
+import os
+from dotenv import load_dotenv
+
+load_dotenv(".env")
+token: str = os.getenv("token")
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -10,7 +16,7 @@ client = discord.Client(intents=intents)
 #status=discord.Status.invisible,
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game('with your mom'))
+    await client.change_presence(activity=discord.Game(' :)'))
     print(f'We have logged in as {client.user}')
 
 
@@ -20,25 +26,6 @@ async def on_message(message):
         return
 
     msg = message.content
-    msg2 = str(msg.lower())
-
-    if message.author.id == 217143982105427968:  #Peter
-        await message.channel.send("Peter is sexy")
-
-    if message.author.id == 799084628324778025:  #medha
-        await message.channel.send("Hi Medha :)")
-
-    if 'fuck shay' in msg2:
-        await message.channel.send("fuck " + message.author.name)
-
-    if 'fuck mingo' in msg2:
-        await message.channel.send("Facts")
-
-    if 'fuck peter' in msg2:
-        await message.channel.send("Not facts")
-
-    if 'peter' in msg2:
-        await message.channel.send("Peter is very sexy")
 
     if msg.startswith('++coinflip'):
         rand = random.choice(["Heads", "Tails"])
@@ -46,4 +33,5 @@ async def on_message(message):
 
 
 
-client.run('KEY')
+
+client.run(token)
