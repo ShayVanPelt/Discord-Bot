@@ -7,18 +7,18 @@ from dotenv import load_dotenv
 load_dotenv(".env")
 token: str = os.getenv("token")
 
-intents = discord.Intents.default()
-intents.message_content = True
+#intents = discord.Intents.default()
+intents = discord.Intents.all()
 
 client = discord.Client(intents=intents)
 
 con = None
 
 async def print_users(message):
-    async with con.cursor() as cursor:
+   async with con.cursor() as cursor:
         await cursor.execute('SELECT id, money FROM users')
         rows = await cursor.fetchall()
-        results = "\n".join([f"User ID: {message.guild.get_member(row[0]).name}, Balance: ${row[1]}" for row in rows])
+        results = "\n".join([f"User: {message.guild.get_member(row[0]).name}, Balance: ${row[1]}" for row in rows])
         await message.channel.send(results)
         
 async def set_balance(user_id, amount):
@@ -56,6 +56,19 @@ async def on_message(message):
         return
 
     msg = message.content.split()
+
+    if message.author.id == 799084628324778025:  #medha
+        await message.channel.send("Hi Medha :)")
+
+    if (msg[0] == '++help'):
+        help_text = (
+            "```All Current ShayBot Commands:\n"
+            "++help - Show this help message with a list of commands\n"
+            "++getbalance - Check your current balance, set initial balance, and reset balance if you get to $0\n"
+            "++coinflip <amount> <heads/tails> - Bet on a coinflip with the specified amount and choice\n"
+            "++table - Display the balance of all users ```\n"
+        )
+        await message.channel.send(help_text)
 
     if (msg[0] == '++table'):
         await print_users(message)
